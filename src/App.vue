@@ -19,6 +19,6 @@ export default {
   padding: 0;
 }
 img {
-  vertical-align: middle;
+  vertical-align: bottom;
 }
 </style>
