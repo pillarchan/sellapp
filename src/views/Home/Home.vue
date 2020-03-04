@@ -4,24 +4,26 @@
       <div class="wrapper">
         <div class="top">
           <div class="inner_wrapper">
-            <div class="img"></div>
+            <div>
+              <img :src="this.data.avatar" alt="商家头像" class="img" />
+            </div>
             <div class="desc">
-              <p class="brand">
+              <p class="brand" v-cloak>
                 <img src="../../assets/img/brand@2x.png" alt />
-                品牌名
+                {{this.data.name}}
               </p>
-              <p class="delivery_type">配送方式</p>
-              <p class="support">
+              <p class="delivery_type" v-text="this.data.description">配送方式</p>
+              <p class="support" v-cloak>
                 <img src="../../assets/img/decrease_1@2x.png" alt />
-                在线支持
+                {{this.data.supports | supportsStr}}
               </p>
             </div>
             <div class="yoxi">5个</div>
           </div>
         </div>
         <div class="announce">
-          <img src="../../assets/img/bulletin@3x.png" alt="公告" />
-          <span v-text="announce"></span>
+          <img src="../../assets/img/bulletin@2x.png" alt="公告" />
+          <span v-text="this.data.bulletin"></span>
         </div>
       </div>
     </header>
@@ -39,35 +41,42 @@
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue'
 // import { getSeller } from "../../api/ajax.js";
-import axios from "axios";
+import { getSeller } from "../../api/ajax";
 export default {
   name: "Home",
   data() {
     return {
       seletedTitle: "/",
-      announce: "好好吃好好吃 "
+      data: {}
     };
   },
   methods: {
     toPage(page) {
       this.seletedTitle = page;
       this.$router.push(page);
-    },
-    getSellerInfo() {
-      axios
-        .get("http://127.0.0.1:8080/public/seller.json")
-        .then(res => console.log(res.data))
-        .catch(err => console.log(err));
     }
   },
-  created() {
-    console.log(this.getSellerInfo);
-    this.getSellerInfo();
+  filters: {
+    supportsStr(arr) {
+      if (arr) {
+        return arr.map(v => v.description).join(",");
+      } else {
+        return "";
+      }
+    }
+  },
+  async created() {
+    let result = await getSeller();
+    this.data = result.data;
+    // console.log(this.data);
   }
   // components: {}
 };
 </script>
 <style lang="less" scoped>
+[v-cloak] {
+  display: none;
+}
 header {
   .wrapper {
     .top {
@@ -83,6 +92,9 @@ header {
         }
         .desc {
           padding: 0.25rem 2rem;
+          display: flex;
+          flex-flow: column;
+          justify-content: space-around;
           .brand {
             font: bold 2rem/2.25rem "";
             color: #fff;
@@ -100,13 +112,17 @@ header {
     }
     /**公告 */
     .announce {
+      display: flex;
+      align-items: center;
       padding: 0 1.5rem;
       height: 3.5rem;
       background-color: rgba(7, 17, 27, 0.2);
       img {
-        vertical-align: -0.65rem;
+        // vertical-align: -0.65rem;
+        height: 2rem;
       }
       span {
+        flex: 0 0 12.5rem;
         padding: 0.5rem;
         line-height: 3.5rem;
         font-size: 1.25rem;
@@ -129,6 +145,7 @@ nav {
     flex: 1;
     text-align: center;
     font-size: 1.75rem;
+    cursor: pointer;
   }
 }
 .active_title {

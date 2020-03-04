@@ -1,5 +1,6 @@
-// import axios from 'axios';
+import axios from 'axios';
 
-// export let getSeller = () => {
-//   axios.get('../../public/server/seller.json').then(res => console.log(res.data));
-// };
+const sellerBaseUrl = 'http://127.0.0.1:666/';
+export const getSeller = () => {
+  return axios.get(sellerBaseUrl + 'seller/');
+};
