@@ -18,6 +18,13 @@ export default {
   margin: 0;
   padding: 0;
 }
+ul,
+dl,
+dt,
+dd,
+li {
+  list-style: none;
+}
 img {
   vertical-align: bottom;
 }

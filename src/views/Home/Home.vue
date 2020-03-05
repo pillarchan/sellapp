@@ -81,31 +81,35 @@ header {
   .wrapper {
     .top {
       background-color: rgba(7, 17, 27, 0.5);
-      padding: 3rem 1.5rem 2.25rem 3rem;
+      padding: 1.5rem 0.75rem 1.125rem 1.5rem;
       .inner_wrapper {
         display: flex;
         .img {
-          flex: 0 0 8rem;
-          height: 8rem;
+          flex: 0 0 4rem;
+          height: 4rem;
           background-color: aquamarine;
-          border-radius: 0.25rem;
+          border-radius: 0.125rem;
         }
         .desc {
-          padding: 0.25rem 2rem;
+          padding: 0.125rem 1rem;
           display: flex;
           flex-flow: column;
           justify-content: space-around;
+          color: #fff;
           .brand {
-            font: bold 2rem/2.25rem "";
-            color: #fff;
+            img {
+              height: 1.25rem;
+            }
+            font: bold 1rem/1.125rem "";
           }
           .delivery_type {
-            font: 1.5rem/1.5rem "";
-            color: #fff;
+            font: 0.75rem/1 "";
           }
           .support {
-            font: 1.25rem/1.5rem "";
-            color: #fff;
+            img {
+              height: 0.75rem;
+            }
+            font: 0.625rem/0.75rem "";
           }
         }
       }
@@ -114,18 +118,18 @@ header {
     .announce {
       display: flex;
       align-items: center;
-      padding: 0 1.5rem;
-      height: 3.5rem;
+      padding: 0 0.75rem;
+      height: 1.75rem;
       background-color: rgba(7, 17, 27, 0.2);
       img {
         // vertical-align: -0.65rem;
-        height: 2rem;
+        height: 1rem;
       }
       span {
-        flex: 0 0 12.5rem;
-        padding: 0.5rem;
-        line-height: 3.5rem;
-        font-size: 1.25rem;
+        flex: 1;
+        padding: 0.25rem;
+        line-height: 1.75rem;
+        font-size: 0.6125rem;
         font-weight: 200;
         color: #fff;
         overflow: hidden;
