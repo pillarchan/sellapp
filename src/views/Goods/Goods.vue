@@ -1,7 +1,10 @@
 <template>
   <div id="goods">
+    <!-- 左侧菜单 -->
     <div class="menu">
+      <!-- 使用better-scroll 必须要有一个外层 类名必须命名为content -->
       <ul class="content">
+        <!-- 循环后台提供的数据 -->
         <li :class="{ actived: selected == i }" v-for="(v, i) of goodsData" :key="i" @click="clickMemu(i)" v-cloak>
           {{ v['name'] }}
         </li>
@@ -9,6 +12,7 @@
     </div>
     <div class="details">
       <ul class="content">
+        <!-- 绑定动态id用于左联右，选择dom对象 -->
         <div :id="i" v-for="(v, i) of goodsData" :key="i">
           <div v-text="v['name']" class="details_title"></div>
           <div v-for="(items, i) of v['foods']" :key="i" class="details_content">
@@ -26,6 +30,7 @@
 </template>
 
 <script>
+// 引入better-scroll
 import BScroll from 'better-scroll';
 export default {
   data() {
@@ -38,9 +43,10 @@ export default {
     };
   },
   methods: {
+    // 左联右点击事件
     clickMemu(index) {
       // this.selected = index;
-      // console.log(this.selected);
+      // 核心方法scrollToElement(dom节点,动画时长),其它参数参照better-scroll手册
       this.details.scrollToElement(document.getElementById(index), 300);
     }
   },
@@ -517,22 +523,28 @@ export default {
     ];
   },
   mounted() {
+    //使用better-scroll类实例化一个menu DOM对象 由于better-scorll会默认屏蔽click事件，所以需要将click选项设为true
     this.menu = new BScroll('.menu', { click: true });
+    //使用better-scroll类实例化一个details DOM对象 由于使用better-scorll滑动时需要实时获取y轴坐标，须设置选项porbeType为3
     this.details = new BScroll('.details', {
       probeType: 3
     });
-
+    // 将右侧每项的高度存到一个数组中，如果这个数组已经有数据则不执行此中循环
     if (this.divesHeight.length < 1) {
       for (let i = 0; i < this.goodsData.length; i++) {
         this.divesHeight.push(document.getElementById(i).offsetHeight);
       }
     }
-    let finalHeight = 0;
-    for (let i = 0; i < this.divesHeight.length - 1; i++) {
-      finalHeight += this.divesHeight[i];
-    }
-    console.log(finalHeight);
+    //使用better-scroll中的on方法监听滑动事件，传入一个对象，这个对象的y就是y轴坐标
     this.details.on('scroll', obj => {
+      /**右联左  设置一个总高度  当滚动时就获取y轴坐标和总高度，循环右侧每项高度的数组，相加得到总高度，
+       * 判断y轴是否大于处于当前层的总高度，被激活的左菜单菜单选项就等于当前索引值加1
+       * 第一项和最后一项需做单独判断*/
+      let finalHeight = 0;
+      for (let i = 0; i < this.divesHeight.length - 2; i++) {
+        finalHeight += this.divesHeight[i];
+      }
+      // console.log(finalHeight);
       let totalHeight = 0;
       let y = Math.abs(obj.y);
       for (let i = 0; i < this.divesHeight.length; i++) {
@@ -540,16 +552,14 @@ export default {
         totalHeight += curHeight;
         if (y < this.divesHeight[0]) {
           this.selected = 0;
-        }
-        if (y == finalHeight) {
+        } else if (y > finalHeight + 10) {
           this.selected = this.divesHeight.length - 1;
-        }
-        if (y >= totalHeight - 10) {
+        } else if (y >= totalHeight - 10) {
           this.selected = i + 1;
           continue;
         }
       }
-      console.log(Math.abs(obj.y));
+      // console.log(Math.abs(obj.y));
     });
   },
   updated() {}
@@ -560,6 +570,7 @@ export default {
 @bglightGreyColor: #f3f5f7;
 #goods {
   display: flex;
+  height: 100%;
   [v-cloak] {
     display: none;
   }
@@ -568,9 +579,10 @@ export default {
     font-weight: bold !important;
   }
   .menu {
-    overflow: auto;
+    /** 因为需要使用better-scorll做滑动效果,外层必须给定高和溢出效果 */
+    overflow: scroll;
     flex: 0 0 5rem;
-    height: 30rem;
+    height: 25rem;
     ul {
       display: flex;
       flex-flow: column;
@@ -591,7 +603,7 @@ export default {
   .details {
     overflow: scroll;
     flex: 1;
-    height: 30rem;
+    height: 25rem;
     ul {
       display: flex;
       flex-flow: column;
