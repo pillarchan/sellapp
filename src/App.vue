@@ -22,7 +22,8 @@ ul,
 dl,
 dt,
 dd,
-li {
+li,
+div {
   list-style: none;
 }
 img {

@@ -5,17 +5,17 @@
         <div class="top">
           <div class="inner_wrapper">
             <div>
-              <img :src="this.data.avatar" alt="商家头像" class="img" />
+              <img :src="this.sellerData.avatar" alt="商家头像" class="img" />
             </div>
             <div class="desc">
               <p class="brand" v-cloak>
                 <img src="../../assets/img/brand@2x.png" alt />
-                {{ this.data.name }}
+                {{ this.sellerData.name }}
               </p>
-              <p class="delivery_type" v-text="this.data.description">配送方式</p>
+              <p class="delivery_type" v-text="this.sellerData.description">配送方式</p>
               <p class="support" v-cloak>
                 <img src="../../assets/img/decrease_1@2x.png" alt />
-                {{ this.data.supports | supportsStr }}
+                {{ this.sellerData.supports | supportsStr }}
               </p>
             </div>
             <div class="yoxi">5个</div>
@@ -23,7 +23,7 @@
         </div>
         <div class="announce">
           <img src="../../assets/img/bulletin@2x.png" alt="公告" />
-          <span v-text="this.data.bulletin"></span>
+          <span v-text="this.sellerData.bulletin"></span>
         </div>
       </div>
       <nav>
@@ -37,22 +37,33 @@
     </main>
 
     <footer>
-      <div id="shop_cart"></div>
+      <div id="shop_cart">
+        <Poptip content="content" placement="top-start" width="300px">
+          <Icon type="md-cart" class="md-cart" :class="{mdCartOrange:hasGoods}" />
+          <div slot="content">
+            <ShopCart />
+          </div>
+        </Poptip>
+        <div class="total">
+          <Icon type="logo-yen" />
+          <span v-text="totalPrice"></span>
+        </div>
+        <Button type="default" ghost shape="circle">下单</Button>
+      </div>
     </footer>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
-// import { getSeller } from "../../api/ajax.js";
-import { getSeller } from '../../api/ajax';
+import { getSeller } from "../../api/ajax";
+import ShopCart from "./ShopCart";
 export default {
-  name: 'Home',
+  name: "Home",
   data() {
     return {
-      seletedTitle: '/',
-      data: {}
+      seletedTitle: "/",
+      sellerData: {},
+      buttonSize: "large"
     };
   },
   methods: {
@@ -64,18 +75,31 @@ export default {
   filters: {
     supportsStr(arr) {
       if (arr) {
-        return arr.map(v => v.description).join(',');
+        return arr.map(v => v.description).join(",");
       } else {
-        return '';
+        return "";
       }
     }
   },
+  computed: {
+    hasGoods() {
+      return this.$store.getters.getShopCartGoods.length > 0;
+    },
+    totalPrice() {
+      let total = 0;
+      for (let obj of this.$store.getters.getShopCartGoods) {
+        total += obj.num * parseFloat(obj.price).toFixed(2);
+      }
+      return parseFloat(total).toFixed(2);
+    }
+  },
   async created() {
-    let result = await getSeller();
-    this.data = result.data;
-    // console.log(this.data);
+    let seller = await getSeller();
+    this.sellerData = seller.data.data;
+  },
+  components: {
+    ShopCart
   }
-  // components: {}
 };
 </script>
 <style lang="less" scoped>
@@ -110,16 +134,16 @@ export default {
               img {
                 height: 1.25rem;
               }
-              font: bold 1rem/1.125rem '';
+              font: bold 1rem/1.125rem "";
             }
             .delivery_type {
-              font: 0.75rem/1 '';
+              font: 0.75rem/1 "";
             }
             .support {
               img {
                 height: 0.75rem;
               }
-              font: 0.625rem/0.75rem '';
+              font: 0.625rem/0.75rem "";
             }
           }
         }
@@ -172,9 +196,20 @@ export default {
     #shop_cart {
       position: fixed;
       bottom: 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
       width: 100%;
       height: 4rem;
       background-color: #000;
+      color: #fff;
+      font-size: 1.5rem;
+      .md-cart {
+        font-size: 3rem;
+      }
+      .mdCartOrange {
+        color: orange;
+      }
     }
   }
 }

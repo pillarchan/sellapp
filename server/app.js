@@ -4,17 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-// 设置路由
+var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var sellerRouter = require('./routes/seller');
 
 var app = express();
 
 // view engine setup
-app.all('*', (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -24,9 +19,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use('/', indexRouter);
+app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/seller', sellerRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -43,7 +37,12 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-app.listen(666, function() {
-  console.log('sellerapp started at http://127.0.0.1:666');
+
+app.listen(3000, function() {
+  console.log('服务器已经启动...\n--------------------------');
+  console.log('返回商品接口：/api/goods');
+  console.log('返回评论接口：/api/ratings');
+  console.log('返回商家接口：/api/seller');
 });
+
 module.exports = app;

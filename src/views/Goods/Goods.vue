@@ -5,9 +5,13 @@
       <!-- 使用better-scroll 必须要有一个外层 类名必须命名为content -->
       <ul class="content">
         <!-- 循环后台提供的数据 -->
-        <li :class="{ actived: selected == i }" v-for="(v, i) of goodsData" :key="i" @click="clickMemu(i)" v-cloak>
-          {{ v['name'] }}
-        </li>
+        <li
+          :class="{ actived: selected == i }"
+          v-for="(v, i) of goodsData"
+          :key="i"
+          @click="clickMemu(i)"
+          v-cloak
+        >{{ v['name'] }}</li>
       </ul>
     </div>
     <div class="details">
@@ -19,8 +23,25 @@
             <img :src="items['icon']" alt />
             <div v-cloak class="details_desc">
               <div class="details_desc_name">{{ items['name'] }}</div>
-              <div class="details_desc_appraise">月售{{ items['sellCount'] }}份 好评率{{ items['rating'] }}%</div>
-              <div class="details_desc_price"><span>￥</span>{{ items['price'] }}</div>
+              <div
+                class="details_desc_appraise"
+              >月售{{ items['sellCount'] }}份 好评率{{ items['rating'] }}%</div>
+              <div class="details_desc_price">
+                <span>￥</span>
+                {{ items['price'] }}
+                <Icon
+                  class="details_desc_price_icon"
+                  type="md-remove-circle"
+                  @click="clickDecGoods(items.name)"
+                  v-show="items.num>0"
+                />
+                <span v-text="items['num']" v-show="items['num']>0"></span>
+                <Icon
+                  class="details_desc_price_icon"
+                  type="md-add-circle"
+                  @click="clickAddGoods(items.name)"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -31,12 +52,12 @@
 
 <script>
 // 引入better-scroll
-import BScroll from 'better-scroll';
+import BScroll from "better-scroll";
+// import { getGoods } from "../../api/ajax";
 export default {
   data() {
     return {
       selected: 0,
-      goodsData: [],
       menu: {},
       details: {},
       divesHeight: []
@@ -48,503 +69,48 @@ export default {
       // this.selected = index;
       // 核心方法scrollToElement(dom节点,动画时长),其它参数参照better-scroll手册
       this.details.scrollToElement(document.getElementById(index), 300);
+    },
+    clickAddGoods(name) {
+      this.$store.commit({
+        type: "changeNum",
+        name,
+        num: 1
+      });
+    },
+    clickDecGoods(name) {
+      this.$store.commit({
+        type: "changeNum",
+        name,
+        num: -1
+      });
     }
   },
-  async created() {
-    this.goodsData = [
-      {
-        name: '热销榜',
-        type: -1,
-        foods: [
-          {
-            name: '皮蛋瘦肉粥',
-            price: 10,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          }
-        ]
-      },
-      {
-        name: '单人特色套餐',
-        type: -1,
-        foods: [
-          {
-            name: '皮蛋瘦肉粥配包子套餐',
-            price: 24,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          }
-        ]
-      },
-      {
-        name: '特色粥品',
-        type: -1,
-        foods: [
-          {
-            name: '莲子核桃黑米粥',
-            price: 10,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          },
-          {
-            name: '雪梨银耳百合粥',
-            price: 24,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          },
-          {
-            name: '南瓜粥',
-            price: 24,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          }
-        ]
-      },
-      {
-        name: '精选热菜',
-        type: -1,
-        foods: [
-          {
-            name: '莲子核桃黑米粥',
-            price: 10,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          },
-          {
-            name: '雪梨银耳百合粥',
-            price: 24,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          },
-          {
-            name: '南瓜粥',
-            price: 24,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          }
-        ]
-      },
-      {
-        name: '爽口凉菜',
-        type: -1,
-        foods: [
-          {
-            name: '莲子核桃黑米粥',
-            price: 10,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          },
-          {
-            name: '雪梨银耳百合粥',
-            price: 24,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          },
-          {
-            name: '南瓜粥',
-            price: 24,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          }
-        ]
-      },
-      {
-        name: '半成品',
-        type: -1,
-        foods: [
-          {
-            name: '莲子核桃黑米粥',
-            price: 10,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          },
-          {
-            name: '雪梨银耳百合粥',
-            price: 24,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          },
-          {
-            name: '南瓜粥',
-            price: 24,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          }
-        ]
-      },
-      {
-        name: '饭类',
-        type: -1,
-        foods: [
-          {
-            name: '莲子核桃黑米粥',
-            price: 10,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          },
-          {
-            name: '雪梨银耳百合粥',
-            price: 24,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          },
-          {
-            name: '南瓜粥',
-            price: 24,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          }
-        ]
-      },
-      {
-        name: '面类',
-        type: -1,
-        foods: [
-          {
-            name: '莲子核桃黑米粥',
-            price: 10,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          },
-          {
-            name: '雪梨银耳百合粥',
-            price: 24,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          },
-          {
-            name: '南瓜粥',
-            price: 24,
-            oldPrice: '',
-            description: '咸粥',
-            sellCount: 229,
-            rating: 100,
-            info:
-              '一碗皮蛋瘦肉粥，总是我到粥店时的不二之选。香浓软滑，饱腹暖心，皮蛋的Q弹与瘦肉的滑嫩伴着粥香溢于满口，让人喝这样的一碗粥也觉得心满意足',
-            ratings: [
-              {
-                username: '3******c',
-                rateTime: 1469281964000,
-                rateType: 0,
-                text: '很喜欢的粥',
-                avatar: 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
-              }
-            ],
-            icon: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114',
-            image: 'http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750'
-          }
-        ]
-      }
-    ];
+  computed: {
+    goodsData() {
+      return this.$store.state.goodsData;
+    }
+  },
+  //
+  created() {
+    this.$store.dispatch("initGoodsData");
   },
   mounted() {
     //使用better-scroll类实例化一个menu DOM对象 由于better-scorll会默认屏蔽click事件，所以需要将click选项设为true
-    this.menu = new BScroll('.menu', { click: true });
+    this.menu = new BScroll(".menu", { click: true });
     //使用better-scroll类实例化一个details DOM对象 由于使用better-scorll滑动时需要实时获取y轴坐标，须设置选项porbeType为3
-    this.details = new BScroll('.details', {
+    this.details = new BScroll(".details", {
       probeType: 3
     });
-    // 将右侧每项的高度存到一个数组中，如果这个数组已经有数据则不执行此中循环
-    if (this.divesHeight.length < 1) {
-      for (let i = 0; i < this.goodsData.length; i++) {
-        this.divesHeight.push(document.getElementById(i).offsetHeight);
-      }
-    }
+
     //使用better-scroll中的on方法监听滑动事件，传入一个对象，这个对象的y就是y轴坐标
-    this.details.on('scroll', obj => {
+    this.details.on("scroll", obj => {
       /**右联左  设置一个总高度  当滚动时就获取y轴坐标和总高度，循环右侧每项高度的数组，相加得到总高度，
        * 判断y轴是否大于处于当前层的总高度，被激活的左菜单菜单选项就等于当前索引值加1
        * 第一项和最后一项需做单独判断*/
-      let finalHeight = 0;
-      for (let i = 0; i < this.divesHeight.length - 2; i++) {
-        finalHeight += this.divesHeight[i];
-      }
-      // console.log(finalHeight);
+      // let finalHeight = 0;
+      // for (let i = 0; i < this.divesHeight.length - 2; i++) {
+      //   finalHeight += this.divesHeight[i];
+      // }
       let totalHeight = 0;
       let y = Math.abs(obj.y);
       for (let i = 0; i < this.divesHeight.length; i++) {
@@ -552,17 +118,21 @@ export default {
         totalHeight += curHeight;
         if (y < this.divesHeight[0]) {
           this.selected = 0;
-        } else if (y > finalHeight + 10) {
-          this.selected = this.divesHeight.length - 1;
         } else if (y >= totalHeight - 10) {
           this.selected = i + 1;
           continue;
         }
       }
-      // console.log(Math.abs(obj.y));
     });
   },
-  updated() {}
+  updated() {
+    // 将右侧每项的高度存到一个数组中，如果这个数组已经有数据则不执行此中循环
+    if (this.divesHeight.length < 1) {
+      for (let i = 0; i < this.goodsData.length; i++) {
+        this.divesHeight.push(document.getElementById(i).offsetHeight);
+      }
+    }
+  }
 };
 </script>
 
@@ -612,7 +182,7 @@ export default {
         .details_title {
           border-left: 2px solid #ccc;
           background-color: @bglightGreyColor;
-          font: bold 1rem/2 '';
+          font: bold 1rem/2 "";
         }
         .details_content {
           padding: 0.5rem;
@@ -636,10 +206,14 @@ export default {
               font-size: 0.875rem;
             }
             .details_desc_price {
+              text-align: center;
               font-size: 1.25rem;
               color: #f00;
               span {
                 font-size: 0.875rem;
+              }
+              .details_desc_price_icon {
+                font-size: 2rem;
               }
             }
           }
