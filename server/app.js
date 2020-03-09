@@ -38,7 +38,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(3000, function() {
+app.listen(666, function() {
   console.log('服务器已经启动...\n--------------------------');
   console.log('返回商品接口：/api/goods');
   console.log('返回评论接口：/api/ratings');
