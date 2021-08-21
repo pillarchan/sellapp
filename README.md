@@ -80,3 +80,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 2. router-link 选中标签后的样式变化,两种方式
    1. 通过.router-link-exact-active 修改样式
    2. 通过 点击事件 结合this.$router.push("path")内置函数 实现页面跳转,跳转同时动态绑定class,实现选中样式的变化
+
+### axios封装
