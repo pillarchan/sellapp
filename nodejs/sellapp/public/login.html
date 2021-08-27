@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="text" name="username" /><br />
+    <input type="text" name="pwd" /><br />
+    <button>登录</button>
+
+    <script>
+      const btn = document.querySelector("button")
+      btn.addEventListener("click", () => {
+        let username = document.querySelector("input[name='username']").value
+        let pwd = document.querySelector("input[name='pwd']").value
+        const ajax = new XMLHttpRequest()
+        ajax.open("post", "/login")
+        ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+        ajax.send(`username=${username}&pwd=${pwd}`)
+        ajax.onreadystatechange = function () {
+          if (this.readyState === 4 && this.status === 200) {
+            let data = JSON.parse(this.responseText)
+            if (data.isLogin) {
+              alert(data.msg)
+            } else {
+              alert(data.msg)
+            }
+          }
+        }
+      })
+    </script>
+  </body>
+</html>

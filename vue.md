@@ -82,3 +82,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
    2. 通过 点击事件 结合this.$router.push("path")内置函数 实现页面跳转,跳转同时动态绑定class,实现选中样式的变化
 
 ### axios封装
+
+1. 安装axios yarn add axios -D
+2. 

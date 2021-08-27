@@ -34,7 +34,7 @@
 	.nav-title {
 		display: flex;
 		justify-content: space-around;
-		a {
+		div {
 			font-size: 1.25rem;
 			color: #69f;
 		}
