@@ -84,4 +84,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ### axios封装
 
 1. 安装axios yarn add axios -D
-2. 
+2. 准备IP地址
